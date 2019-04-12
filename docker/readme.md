@@ -15,7 +15,7 @@
 所需的所有资源打包到一个隔离的容器种，容器与不需要捆绑一整套操作系统，只需要软件工作所需
 的资源和设置。一次变得高效轻量并保证部署在任何环境种软件都能始终如一的运行
 
-###docker基本组成：
+####docker基本组成：
  镜像:运行的模板
  容器:镜像启动的实例，一个镜像可以有多个容器，可以把容器看作是一个简易版的linux环境（
       包括root用户，进程空间，用户空间和网络空间等)和运行在其中的应用程序。相互隔离
@@ -23,7 +23,7 @@
  docker client：
  docker dameon：
 
-###安装：
+####安装：
 centos6.8
 1 yum install -y epel-release
 2 yum install -y docker-io 安装后配置文件 /etc/sysconfig/docker
@@ -34,7 +34,7 @@ centos7
  配置文件/etc/docker/daemon.json（安装后不存在，可手动新建）
 2 systemctl start docker启动
 
-###镜像加速器
+####镜像加速器
 阿里云加速：
   注册一个阿里云账户
   获取加速器地址链接获取地址dev.aliyun.com
@@ -45,7 +45,7 @@ centos7
 
 docker run hello-world
 
-###docker底层原理
+####docker底层原理
 docker怎么工作的？
 cs架构
 为什么docker比vm快？
@@ -53,5 +53,5 @@ cs架构
 内存等 docker效率明显优势
 2docker利用的是宿主机的内核，而不是guest os。
 
-###docker命令
+####docker命令
 
