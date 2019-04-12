@@ -11,47 +11,47 @@
 容器在任何操作系统上都是一致的，这就实现了跨平台，跨服务器，只需要一次配置号运行环境，换
 到别的机子上就可以一键部署好，大大的简化了操作。
 
-能干嘛：传统虚拟机缺点略，docker容器不是模拟一个完整的操作系统，而是进行进程隔离，将软件
-所需的所有资源打包到一个隔离的容器种，容器与不需要捆绑一整套操作系统，只需要软件工作所需
-的资源和设置。一次变得高效轻量并保证部署在任何环境种软件都能始终如一的运行
+能干嘛：传统虚拟机缺点略，docker容器不是模拟一个完整的操作系统，而是进行进程隔离，将软件  
+所需的所有资源打包到一个隔离的容器种，容器与不需要捆绑一整套操作系统，只需要软件工作所需  
+的资源和设置。一次变得高效轻量并保证部署在任何环境种软件都能始终如一的运行  
 
 #### docker基本组成：
- 镜像:运行的模板
- 容器:镜像启动的实例，一个镜像可以有多个容器，可以把容器看作是一个简易版的linux环境（
-      包括root用户，进程空间，用户空间和网络空间等)和运行在其中的应用程序。相互隔离
- 仓库:镜像仓库，一个仓库可以多个镜像
- docker client：
- docker dameon：
+ 镜像:运行的模板  
+ 容器:镜像启动的实例，一个镜像可以有多个容器，可以把容器看作是一个简易版的linux环境（  
+      包括root用户，进程空间，用户空间和网络空间等)和运行在其中的应用程序。相互隔离  
+ 仓库:镜像仓库，一个仓库可以多个镜像  
+ docker client：  
+ docker dameon：  
 
-#### 安装：
-centos6.8
-1 yum install -y epel-release
-2 yum install -y docker-io 安装后配置文件 /etc/sysconfig/docker
-3 service docker start 启动docker dameon服务 
-4 docker version
-centos7
-1 https://docs.docker.com/install/linux/docker-ce/centos/
- 配置文件/etc/docker/daemon.json（安装后不存在，可手动新建）
-2 systemctl start docker启动
+#### 安装：  
+centos6.8  
+1 yum install -y epel-release  
+2 yum install -y docker-io 安装后配置文件 /etc/sysconfig/docker  
+3 service docker start 启动docker dameon服务   
+4 docker version  
+centos7  
+1 https://docs.docker.com/install/linux/docker-ce/centos/  
+ 配置文件/etc/docker/daemon.json（安装后不存在，可手动新建）  
+2 systemctl start docker启动  
 
-#### 镜像加速器
-阿里云加速：
-  注册一个阿里云账户
-  获取加速器地址链接获取地址dev.aliyun.com
-  配置docker运行镜像加速器
-  systemctl daemon-reload
-  重启docker daemon
-......
+#### 镜像加速器  
+阿里云加速：  
+  注册一个阿里云账户  
+  获取加速器地址链接获取地址dev.aliyun.com  
+  配置docker运行镜像加速器  
+  systemctl daemon-reload  
+  重启docker daemon  
+......  
 
-docker run hello-world
+docker run hello-world  
 
-#### docker底层原理
-docker怎么工作的？
-cs架构
-为什么docker比vm快？
+#### docker底层原理  
+docker怎么工作的？  
+cs架构  
+为什么docker比vm快？  
 1有更少的抽象层，不需要实现硬件资源虚拟化，直接使用的物理机资源。因此cpu，
-内存等 docker效率明显优势
-2docker利用的是宿主机的内核，而不是guest os。
+内存等 docker效率明显优势  
+2docker利用的是宿主机的内核，而不是guest os。  
 
-#### docker命令
+#### docker命令  
 
