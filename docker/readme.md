@@ -133,34 +133,8 @@ docker commit [option] 容器id imageName[:标签名]:提交镜像副本，使�
             option:-m='描述信息'
                    -a='auther'
 
-#### 数据卷
-卷的设计目的就是数据持久化，完全独立于容器的生存周期，因此docker不会在容器删除时删除其  
-挂载的数据卷  
-特点：  
- 数据卷可在容器之间共享或重用数据  
- 卷中的更改可以直接生效  
- 卷的更改不会包含在镜像的更新中  
- 卷的生命周期一直持续到没有容器使用它为止  
 
-
-
-
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-####容器数据卷
+#### 容器数据卷
 docker容器产生的数据，如果不用commit生成新的镜像，使得数据成为镜像的一部分  
 保存下来，那么当容器被删除时候数据也就丢失。为了能保存数据而使用数据卷。
 1. 绕过“拷贝写”系统，以达到本地磁盘IO的性能，（比如运行一个容器，在容器中对
@@ -188,6 +162,10 @@ CMD echo 'finished success...'
 CMD /bin/bash
 构建镜像 docker build -f /Dockerfile -t cgl/centos /dir 这种镜像启动的容器自动带了
 数据卷，docker会自动挂载在宿主机的默认目录下/var/lib/docker/volumes/自动生成目录名
+docker build [option] targetpath 
+             option: -f 指定Dockerfile路径
+			         -t  同--tag 镜像tag
+					 -v volume
 
 
 
