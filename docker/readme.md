@@ -53,5 +53,97 @@ cs架构
 内存等 docker效率明显优势  
 2docker利用的是宿主机的内核，而不是guest os。  
 
-#### docker命令  
+#### docker命令    
+docker version:  
+docker info:docker基本信息  
+docker --help:帮助信息  
+
+镜像命令：  
+docker images [option]：tag 版本标签，imageid 镜像id  
+             option：-a 本地所有镜像（含中间映像层）  
+                  -q 只象时imageid  
+                  --digests：显示摘要信息  
+                  --no-trun：不截取，显示完整信息  
+docker search [option] image_name：搜索镜像 hub.docker.com 而不是加速器地址   
+             option : -s stars数 eg -s 100 超过100stars  
+                     --no-trunc:完整信息  
+                     --automated：只列出automated build类型镜像即automated列为ok的  
+docker pull [option]  image_name[:tag=latest]: 从远程[加速器]仓库下载  
+            option: -a 下载所有tag版本  
+                    -q 静默下载  
+docker rmi [option]  image_name[:tag=latest]:  
+         option: -f强制删除   
+         删除全部：docker rmi -f $(docker images -qa)  
+容器命令  
+docker run [option] image [command] [arg...]:创建并运行容器    
+           option: -i以交互模式运行容器，通常和-t一起使用    
+                   -t为容器重新分配一个伪输入终端，通常和-i一起使用  
+                   -d 后台运行，并返回容器id，也即启动守护容器  
+                   -P 随机端口映射  
+                   -p 指定端口映射 四种格式  
+                      ip:hostPort:containerPort  
+                      ip::containerPort  
+                      hostPort:containerPort  
+                      containerPort  
+                   --name=XXX 为容器指定名称  
+         
+docker ps [option]: 查看运行种的容器     
+          option:-a 展示全部，包括历史容器  
+docker start 容器id：启动容器
+docker restart 容器id：重启容器
+docker stop 容器id：停止容器
+docker kill 容器id：强制停止
+docker rm [-f 强制] 容器id:删除已停止的容器 docker rm $(docker ps -qa)  
+docker logs [option]容器id：查看容器日志（容器前台进程产生的日志,相当于shell界面日志）  
+            option:-f 跟随最新日志   
+                   -t 时间   
+                   --tail 显示最后    
+docker top 容器id：显示容器内部运行进程   
+docker inspect 容器id：查看容器内部细节  
+进入容器并以命令行交互：  
+ docker exec -it 容器id /bin/bash ：exit不会关闭  
+ docker attach 容器id：不会启动新的进程,这时exit会导致容器关闭,不推荐该命令  
+docker cp 容器id：容器内路径 主机路径：拷贝文件到宿主机  
+      
+eg: docker run -it --name=myname image 启动交互容器，exit退出后自动关闭     
+    docker run -d ... image 以守护进程启动，docker容器后台运行，则容器种必须有一个前    
+    台进程，容器种运行的命令若不是一直挂起的命令(如top，tail),就会自动退出所以，最佳的    
+    解决方案时，将运行的程序以前台进程的形式运行      
+
+
+#### 镜像原理  
+镜像是以轻量级，可执行的独立软件包，用来打包软件运行环境和基于运行环境开发的软件。它包含  
+运行某个软件所需的所有内容，包括代码，运行时，库，环境变量和配置文件。。  
+UnionFS：联合文件系统，是一种分层，轻量级且高性能的文件系统，它支持对文件系统的修改作为  
+一次提交来一层层的叠加，unionfs是docker镜像基础，镜像可以通过分层来镜像继承，基于基础就   
+像（没有父镜像）可以制作各种具体应用镜像；特性，一次加载多个文件系统，但从外面看，只能看  
+到一个我呢见系统，联合加载会把哥层文件系统叠加起来，这样最终的文件系统包含所有底层的文件  
+和目录，docker镜像实际上由一层一层文件系统组成，这种层级席间系统就是unionfs。
+
+bootfs:(boot file system,主要包含bootloader和kernel,bootloader主要是引导加载kernel   
+linux刚启动时会加载bootfs，在docker镜像最底层就是bootfs，这一层与我们经典的linux/unix  
+系统一样，包含boot加载器和内核，当boot加载完成之后整个内核就都到内存种了，此时内存的使  
+用权由bootfs转交给内核，此时系统也会卸载bootfs   
+rootfs:在bootfs之上，包含的就是典型的linux系统种的 /dev /proc /etc等标准目录和文件，
+rootfs就是各种不同文件系统的发行版，如centos，ubuntu
+分层好处：多个镜像从相同base镜像构建而来，宿主机只需在磁盘保存一分base镜像，内存中也只  
+需加载一份base镜像，就可以为多个容器共享  
+
+docker commit [option] 容器id imageName[:标签名]:提交镜像副本，使之成为一个新的镜像
+            option:-m='描述信息'
+                   -a='auther'
+
+#### 数据卷
+卷的设计目的就是数据持久化，完全独立于容器的生存周期，因此docker不会在容器删除时删除其  
+挂载的数据卷  
+特点：  
+ 数据卷可在容器之间共享或重用数据  
+ 卷中的更改可以直接生效  
+ 卷的更改不会包含在镜像的更新中  
+ 卷的生命周期一直持续到没有容器使用它为止  
+
+
+
+
+                
 
