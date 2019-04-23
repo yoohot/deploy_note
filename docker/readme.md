@@ -174,5 +174,36 @@ eg docker run -it --name dc1 image
    docker run -it --name dc2 volumes-from dc1 image #共享dc1容器的数据卷
    docker run -it --name dc3 volumes-from dc2 image #共享dc2（dc1）数据卷
 
+   
+#### Dockerfile解析
+dockerfile是用来构建镜像的构建文件，是由一系列命令和参数构成的脚本
+编辑dockerfile文件 -> build成镜像 -> run
+1每条保留字指令必须大写，且指令后至少需要一个参数
+2指令按照从上到下的顺序执行
+3#表示注释
+4每条指令都会创建一个新的镜像层，并对镜像进行提交
+执行流程：
+1docker从基础镜像运行一个容器
+2执行一条指令并对容器做出修改
+3执行类似commit操作提交一个新的镜像层
+4docker再基于刚提交的镜像运行一个新容器
+5执行dockerfile中的下一个指令循环以上步骤直到所有指令执行完成
 
-
+dockerfile关键字
+FROM:当前镜像基于的基础镜像
+MAINTAINER:镜像维护者的名称/邮箱 （格式不固定，就是一个描述）
+RUN：容器构建时需要运行的命令 eg redis dockerfile中会添加redis用户和用户组
+EXPOSE:当前容器对外暴露的端口号
+WORKDIR:创建容器后，终端登陆进来默认的工作目录，落脚点，没指定默认 / 
+ENV:在构建镜像过程中设置环境变量 key value，这个变量可以在后续其他命令中使用，$key
+    eg: ENV dir /usr/tmp 
+	    WORKDIR $dir
+ADD:将宿主机目录下的文件拷贝进镜像且ADD命令会自动处理URL和加压tar压缩包
+COPY:类似于ADD，将文件/目录拷贝到镜像
+       构建上下文路径中的文件/目录   新一层镜像的目标路径位置
+	   COPY src dest   COPY ["src","dest"]
+VOLUME:容器数据卷，用于数据保存和持久化
+CMD:指定容器启动时要运行的命令，dockerfile可以有多个cmd命令，但是只有最后一个有效，
+    cmd会被docker run 命令后面的 command参数替换【如果存在】
+ENTRYPOINT:指定容器启动时要运行的命令,同cmd一样。区别
+ONBUILD:当构建一个被继承的dockerfile时运行的命令,父镜像在被子继承后父镜像的onbuild被触发
