@@ -166,6 +166,13 @@ docker build [option] targetpath
              option: -f 指定Dockerfile路径
 			         -t  同--tag 镜像tag
 					 -v volume
+数据卷容器：容器挂载数据卷，其他容器通过挂载这个容器实现数据共享，挂载了
+数据卷的容器，我们称之为数据卷容器；上面两种数据卷方式都可以；实际上是数据卷配置的
+传递，删除容器不会影响其他容器的数据卷。
+ 参数 --volumes-from 另一个容器 
+eg docker run -it --name dc1 image
+   docker run -it --name dc2 volumes-from dc1 image #共享dc1容器的数据卷
+   docker run -it --name dc3 volumes-from dc2 image #共享dc2（dc1）数据卷
 
 
 
