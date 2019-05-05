@@ -192,7 +192,8 @@ dockerfile是用来构建镜像的构建文件，是由一系列命令和参数�
 dockerfile关键字
 FROM:当前镜像基于的基础镜像
 MAINTAINER:镜像维护者的名称/邮箱 （格式不固定，就是一个描述）
-RUN：容器构建时需要运行的命令 eg redis dockerfile中会添加redis用户和用户组
+RUN:用于指定 docker build 过程中要运行的命令,通常用于安装软件包
+    eg redis dockerfile中会添加redis用户和用户组
 EXPOSE:当前容器对外暴露的端口号
 WORKDIR:创建容器后，终端登陆进来默认的工作目录，落脚点，没指定默认 / 
 ENV:在构建镜像过程中设置环境变量 key value，这个变量可以在后续其他命令中使用，$key
@@ -203,7 +204,11 @@ COPY:类似于ADD，将文件/目录拷贝到镜像
        构建上下文路径中的文件/目录   新一层镜像的目标路径位置
 	   COPY src dest   COPY ["src","dest"]
 VOLUME:容器数据卷，用于数据保存和持久化
-CMD:指定容器启动时要运行的命令，dockerfile可以有多个cmd命令，但是只有最后一个有效，
+CMD:指定容器"启动时"要运行的命令，dockerfile可以有多个cmd命令，但是只有最后一个有效，
     cmd会被docker run 命令后面的 command参数替换【如果存在】
-ENTRYPOINT:指定容器启动时要运行的命令,同cmd一样。区别
+ENTRYPOINT:指定容器"启动时"要运行的命令,同cmd一样。与cmd区别不会被忽略，一定会被执行，
+           即使运行docker run时指定了其他命令也会被当作参数传递给ENTRYPOINT，之后形成
+		   新的命令组合
 ONBUILD:当构建一个被继承的dockerfile时运行的命令,父镜像在被子继承后父镜像的onbuild被触发
+
+docker history 镜像： 查看镜像的构建过程
