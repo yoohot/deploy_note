@@ -190,25 +190,41 @@ dockerfile是用来构建镜像的构建文件，是由一系列命令和参数�
 5执行dockerfile中的下一个指令循环以上步骤直到所有指令执行完成
 
 dockerfile关键字
-FROM:当前镜像基于的基础镜像
+FROM:当前镜像基于的基础镜像，一个dockerfile可以有多个from，只是最终镜像会使用最后
+     一个作为基础镜像，前面的from可以作为构建阶段给后面的构建过程中使用
+    https://www.liangzl.com/get-article-detail-16554.html
 MAINTAINER:镜像维护者的名称/邮箱 （格式不固定，就是一个描述）
 RUN:用于指定 docker build 过程中要运行的命令,通常用于安装软件包
     eg redis dockerfile中会添加redis用户和用户组
+	1. RUN <command>
+    2. RUN ["executable", "param1", "param2"]
 EXPOSE:当前容器对外暴露的端口号
 WORKDIR:创建容器后，终端登陆进来默认的工作目录，落脚点，没指定默认 / 
 ENV:在构建镜像过程中设置环境变量 key value，这个变量可以在后续其他命令中使用，$key
     eg: ENV dir /usr/tmp 
 	    WORKDIR $dir
+		1. ENV <key> <value>
+        2. ENV <key>=<value> ...
+        两者的区别就是第一种是一次设置一个，第二种是一次设置多个
 ADD:将宿主机目录下的文件拷贝进镜像且ADD命令会自动处理URL和加压tar压缩包
 COPY:类似于ADD，将文件/目录拷贝到镜像
        构建上下文路径中的文件/目录   新一层镜像的目标路径位置
 	   COPY src dest   COPY ["src","dest"]
+	    与ADD的区别COPY的<src>只能是本地文件，其他用法一致
 VOLUME:容器数据卷，用于数据保存和持久化
 CMD:指定容器"启动时"要运行的命令，dockerfile可以有多个cmd命令，但是只有最后一个有效，
     cmd会被docker run 命令后面的 command参数替换【如果存在】
+	1. CMD ["executable","param1","param2"]
+    2. CMD ["param1","param2"]
+    3. CMD command param1 param2
+	RUN & CMD不要把RUN和CMD搞混了。
+    RUN是构件容器时就运行的命令以及提交运行结果CMD是容器启动时执行的命令，在构件时并不
+    运行，构件时紧紧指定了这个命令到底是个什么样子
 ENTRYPOINT:指定容器"启动时"要运行的命令,同cmd一样。与cmd区别不会被忽略，一定会被执行，
            即使运行docker run时指定了其他命令也会被当作参数传递给ENTRYPOINT，之后形成
-		   新的命令组合
+		   新的命令组合，https://www.cnblogs.com/dazhoushuoceshi/p/7066041.html
+		   1. ENTRYPOINT ["executable", "param1", "param2"]
+           2. ENTRYPOINT command param1 param2
 ONBUILD:当构建一个被继承的dockerfile时运行的命令,父镜像在被子继承后父镜像的onbuild被触发
 
 docker history 镜像： 查看镜像的构建过程
