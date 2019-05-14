@@ -85,6 +85,7 @@ docker run [option] image [command] [arg...]:创建并运行容器
                       ip::containerPort  
                       hostPort:containerPort  
                       containerPort  
+				   -v 数据卷，可多个-v添加多个数据卷
                    --name=XXX 为容器指定名称  
          
 docker ps [option]: 查看运行种的容器     
@@ -228,3 +229,15 @@ ENTRYPOINT:指定容器"启动时"要运行的命令,同cmd一样。与cmd区别
 ONBUILD:当构建一个被继承的dockerfile时运行的命令,父镜像在被子继承后父镜像的onbuild被触发
 
 docker history 镜像： 查看镜像的构建过程
+
+#### docker常用的安装
+tomcat/redis/mysql 略
+本地镜像发布到阿里云  仓库
+dev.aliyun.com
+1 阿里云上 创建仓库
+2将本地镜像推送到阿里云
+ 根据阿里云上的三个命令
+ 
+ $ sudo docker login --username=cgicccc registry.cn-hangzhou.aliyuncs.com
+ $ sudo docker tag [ImageId] registry.cn-hangzhou.aliyuncs.com/yoohot/yoohot:[镜像版本号] 给镜像打tag
+ $ sudo docker push registry.cn-hangzhou.aliyuncs.com/yoohot/yoohot:[镜像版本号]
